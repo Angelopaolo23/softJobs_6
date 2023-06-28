@@ -1,13 +1,9 @@
 const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
 const { getUserByEmail, createUser } = require('../models/users');
 
 const oneUser = async (req, res) => {
     try {
-        const Authorization = req.header("Authorization");
-        const token = Authorization.split("Bearer ")[1];
-        const { email: user_email } = jwt.verify(token, process.env.JWT_SECRET);
-        const loguedUserData = await getUserByEmail(user_email);
+        const loguedUserData = await getUserByEmail(req.user_email);
         res.json(loguedUserData);
     } catch (error) {
         res.status(500).json({ error: error.message });
